@@ -29,8 +29,5 @@ I have built this just to test my basic knowledge of Data Science, and Model Tra
 4. Cosine similarity calculates movie similarity.
 5. Top 5 similar movies are displayed with posters.
 
-## Steps to Run Locally
-
-```bash
-pip install -r requirements.txt
-streamlit run app.py
+# To view the app please follow below link-
+https://aashishn-movierecosystem.streamlit.app/
