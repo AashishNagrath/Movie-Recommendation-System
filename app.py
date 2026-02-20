@@ -37,11 +37,16 @@ st.markdown("""
 
 
 
-movies = pickle.load(open('movie_list.pkl', 'rb'))
-cv = CountVectorizer(max_features=5000, stop_words='english')
+@st.cache_data
+def load_data():
+    movies = pickle.load(open('movie_list.pkl', 'rb'))
+    cv = CountVectorizer(max_features=5000, stop_words='english')
+    vectors = cv.fit_transform(movies['tags']).toarray()
+    similarity = cosine_similarity(vectors)
+    return movies, similarity
 
-vectors = cv.fit_transform(movies['tags']).toarray()
-similarity = cosine_similarity(vectors)
+
+movies, similarity = load_data()
 
 movie_index_map = {title: idx for idx, title in enumerate(movies['title'])}
 
@@ -92,6 +97,7 @@ selected_movie = st.selectbox(
     movies['title'].values
 )
 
+
 if st.button("Recommend"):
     names, posters = recommend(selected_movie)
 
@@ -102,5 +108,5 @@ if st.button("Recommend"):
     for i in range(5):
         with cols[i]:
             if posters[i]:
-                st.image(posters[i], use_column_width=True)
+                st.image(posters[i], width=200)
             st.markdown(f"**{names[i]}**")
