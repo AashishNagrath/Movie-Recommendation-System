@@ -2,9 +2,7 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
-import os
-from dotenv import load_dotenv
-load_dotenv()
+
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 
@@ -18,8 +16,8 @@ movie_index_map = {title: idx for idx, title in enumerate(movies['title'])}
 
 
 def fetch_poster(movie_id):
-    api_key = os.getenv('TMDB_API_KEY')
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}&language=en-US"
+    API_KEY = st.secrets["TMDB_API_KEY"]
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US"
     
     try:
         response = requests.get(url, timeout=5)
