@@ -2,9 +2,40 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
-
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
+
+st.set_page_config(
+    page_title="Movie Recommender",
+    layout="wide"
+)
+st.markdown("""
+    <style>
+    .main {
+        background-color: #0e1117;
+        color: white;
+    }
+    h1 {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        color: #bbbbbb;
+    }
+    .footer {
+        text-align: center;
+        margin-top: 3rem;
+        font-size: 0.9rem;
+        color: #888888;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
 
 movies = pickle.load(open('movie_list.pkl', 'rb'))
 cv = CountVectorizer(max_features=5000, stop_words='english')
@@ -53,9 +84,8 @@ def recommend(movie):
     return recommended_movies, recommended_posters
 
 
-st.set_page_config(page_title="Movie Recommender", layout="wide")
-
-st.title("Movie Recommendation System")
+st.markdown("<h1>🎬 Movie Recommendation System</h1>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Discover movies similar to your favorites instantly</div>", unsafe_allow_html=True)
 
 selected_movie = st.selectbox(
     "Select a movie",
@@ -64,11 +94,13 @@ selected_movie = st.selectbox(
 
 if st.button("Recommend"):
     names, posters = recommend(selected_movie)
-    
+
+    st.markdown("### Recommended Movies")
+
     cols = st.columns(5)
-    
+
     for i in range(5):
         with cols[i]:
-            st.text(names[i])
             if posters[i]:
-                st.image(posters[i])
+                st.image(posters[i], use_column_width=True)
+            st.markdown(f"**{names[i]}**")
